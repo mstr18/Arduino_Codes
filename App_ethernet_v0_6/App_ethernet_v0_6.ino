@@ -70,7 +70,7 @@ void loop(){
         if (c == '\n')
           {
             unsigned long tempo;
-            String leitura = String(5);
+            String leitura = String(10);
           // vamos verificar se a valvula deve ser ligada
           if(readString.indexOf("Tempo")>=0)
           {   
@@ -81,9 +81,11 @@ void loop(){
               statusSolenoid = true;
               id = t.after(tempo, setOff);
           }
-          if(readString.indexOf("Agenda")>=0)
+          if(readString.indexOf("agen")>=0)
           {
-              leitura = readString.substring(10, 12);
+              leitura = readString.substring(9,15);
+              Serial.print(leitura);
+              Serial.print("\n");
           }
           // Se a string possui o texto Ligar
           if(readString.indexOf("Ligar")>=0)
@@ -126,17 +128,19 @@ void loop(){
           {
               client.print("Ligado");
               client.print("</p>");
-              client.print(rtc.getTimeStr());
+              client.print(readString);
+              //client.print(rtc.getTimeStr());
               client.print("</p>");
-              client.print(rtc.getDateStr());
+              //client.print(rtc.getDateStr());
           } 
           else
           {
               client.print("Desligado");
               client.print("</p>");
-              client.print(rtc.getTimeStr());
+              client.print(readString);
+             //client.print(rtc.getTimeStr());
               client.print("</p>");
-              client.print(rtc.getDateStr());
+              //client.print(rtc.getDateStr());
           }
         //limpa string para a próxima leitura
         readString="";
