@@ -1,12 +1,15 @@
+#include <RTClib.h>
 #include <SPI.h>
 #include <String.h>
 #include <Ethernet.h>
 #include <ctype.h>
 #include <DS1307.h>
 #include "Timer.h"
+#include <EEPROM.h>
 
 //Modulo timer ligado as portas a4 e a5
-DS1307 rtc(A4, A5);
+//DS1307 rtc(A4, A5);
+RTC_DS1307 RTC;
 
 byte mac[] = { 0x90, 0xA2, 0xDA, 0x00, 0x9B, 0x36 }; // Endereço Mac
 byte ip[] = { 192, 168, 1, 130 }; // Endereço de Ip da Rede
@@ -27,7 +30,7 @@ void setOff()
 
 void setup(){
   //Aciona o relogio
-  rtc.halt(false);
+  RTC.begin();
 
   //As linhas abaixo acertam a data e hora do modulo
   //e podem ser comentada apos a primeira utilizacao
@@ -35,9 +38,15 @@ void setup(){
   //rtc.setTime(20, 04, 0); //Define o horario
   //rtc.setDate(29, 12, 2016); //Define o dia, mes e ano
 
+  /*if(! RTC.isrunning())
+  {
+    Serial.println("RTC nao esta em funcionamento");
+    RTC.adjust(DateTime("01/10/2017", "21:33:00"));
+  }*/
+
   //Definicoes do pino SQW/Out
-  rtc.setSQWRate(SQW_RATE_1);
-  rtc.enableSQW(true);
+  //RTC.setSQWRate(SQW_RATE_1);
+  //rtc.enableSQW(true);
   
   // Inicia o Ethernet
   Ethernet.begin(mac, ip);
@@ -50,6 +59,9 @@ void setup(){
 void loop(){
   // Criar uma conexão de cliente
   EthernetClient client = server.available();
+  //inicializa o RTC
+  DateTime now = RTC.now();
+  //Atualiza os processos em segundo plano
   t.update();
   
   if (client) {
@@ -85,7 +97,10 @@ void loop(){
           {
               leitura = readString.substring(9,15);
               Serial.print(leitura);
-              Serial.print("\n");
+             
+              //verificar a hora que chega na string, passar pra int, 
+              //criar uma funcao que verifica
+              //se a hora que chegou e igual a hora atual, jogar no loop
           }
           // Se a string possui o texto Ligar
           if(readString.indexOf("Ligar")>=0)
@@ -137,8 +152,9 @@ void loop(){
           {
               client.print("Desligado");
               client.print("</p>");
-              client.print(readString);
-             //client.print(rtc.getTimeStr());
+              client.print(now.hour());
+              client.print(":");
+              client.print(now.minute());
               client.print("</p>");
               //client.print(rtc.getDateStr());
           }
