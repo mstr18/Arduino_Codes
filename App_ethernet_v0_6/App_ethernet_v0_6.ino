@@ -98,18 +98,15 @@ void loop(){
           if(readString.indexOf("agen")>=0)
           {
               leitura = readString.substring(9,15);
-              strHora = leitura.substring(0,2);
-              Serial.print(strHora);
-              strMinuto = leitura.substring(3,5);
-              Serial.print(strMinuto);
-              //hora = strHora.toInt();
-              //minuto = strMinuto.toInt();
-              Serial.print("Hora recebida: ");
-             
+              strHora = leitura.substring(1,3);
+              hora = strHora.toInt();
+              strMinuto = leitura.substring(4,6);
+              minuto = strMinuto.toInt();
+              Serial.print(hora);
               Serial.print(":");
-              
+              Serial.print(minuto);
               Serial.print("\n");
-             
+              //Serial.print("Hora recebida: ");
               //verificar a hora que chega na string, passar pra int, 
               //criar uma funcao que verifica
               //se a hora que chegou e igual a hora atual, jogar no loop
