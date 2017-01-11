@@ -83,6 +83,8 @@ void loop(){
           {
             unsigned long tempo;
             String leitura = String(10);
+            String strHora(3), strMinuto(3);
+            int hora=0, minuto=0;
           // vamos verificar se a valvula deve ser ligada
           if(readString.indexOf("Tempo")>=0)
           {   
@@ -96,7 +98,17 @@ void loop(){
           if(readString.indexOf("agen")>=0)
           {
               leitura = readString.substring(9,15);
-              Serial.print(leitura);
+              strHora = leitura.substring(0,2);
+              Serial.print(strHora);
+              strMinuto = leitura.substring(3,5);
+              Serial.print(strMinuto);
+              //hora = strHora.toInt();
+              //minuto = strMinuto.toInt();
+              Serial.print("Hora recebida: ");
+             
+              Serial.print(":");
+              
+              Serial.print("\n");
              
               //verificar a hora que chega na string, passar pra int, 
               //criar uma funcao que verifica
