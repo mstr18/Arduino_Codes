@@ -48,17 +48,6 @@ void ativaAlarme()
     statusSolenoid = true;
     id = t.after(*ptrTempoFunc, setOff);
   }
-  /*else if((now.hour() > *ptrHora)||(now.minute() > *ptrMinuto))
-  {
-    //Serial.print("Passou da hora");
-    Serial.print("\n");
-  }
-  else
-  {
-    Serial.print("Ainda nao esta na hora");
-    Serial.print("\n");
-    
-  }*/
 }
 
 void setOff()
@@ -74,7 +63,7 @@ void setup() {
   RTC.begin();
   //A linha abaixo acertam a data e hora do modulo
   //e podem ser comentada apos a primeira utilizacao
-  //RTC.adjust(DateTime("01/14/2017", "19:09:00"));
+  //RTC.adjust(DateTime("01/14/2017", "16:28:00"));
   // Inicia o Ethernet
   Ethernet.begin(mac, ip);
   // Define o pino como saída
