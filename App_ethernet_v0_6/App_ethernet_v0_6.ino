@@ -170,10 +170,10 @@ void loop() {
           {
             client.print("Ligado");
             client.print("</p>");
-            client.print(readString);
-            //client.print(rtc.getTimeStr());
+            client.print(now.hour());
+            client.print(":");
+            client.print(now.minute());
             client.print("</p>");
-            //client.print(rtc.getDateStr());
           }
           else
           {
@@ -183,7 +183,6 @@ void loop() {
             client.print(":");
             client.print(now.minute());
             client.print("</p>");
-            //client.print(rtc.getDateStr());
           }
           //limpa string para a próxima leitura
           readString = "";
