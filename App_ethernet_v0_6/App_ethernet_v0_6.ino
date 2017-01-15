@@ -29,13 +29,15 @@ String readString = String(30); // string para buscar dados de endereço
 boolean statusSolenoid = false; // Variável para o status do led
 Timer t; //Instancia do timer
 int *ptrHora, *ptrMinuto;
+unsigned long *ptrTempoFunc;
 DateTime now;
 
 
-int agenda(int hora, int minuto)
+void agenda(int hora, int minuto, unsigned long tempo)
 {
   ptrHora = &hora;
   ptrMinuto = &minuto;
+  ptrTempoFunc = &tempo;
 }
 
 void ativaAlarme()
@@ -44,10 +46,11 @@ void ativaAlarme()
   {
     digitalWrite(solenoidPin, HIGH);
     statusSolenoid = true;
+    id = t.after(*ptrTempoFunc, setOff);
   }
-  else if((now.hour() > *ptrHora)||(now.minute() > *ptrMinuto))
+  /*else if((now.hour() > *ptrHora)||(now.minute() > *ptrMinuto))
   {
-    Serial.print("Passou da hora");
+    //Serial.print("Passou da hora");
     Serial.print("\n");
   }
   else
@@ -55,7 +58,7 @@ void ativaAlarme()
     Serial.print("Ainda nao esta na hora");
     Serial.print("\n");
     
-  }
+  }*/
 }
 
 void setOff()
@@ -109,12 +112,12 @@ void loop() {
         {
           unsigned long tempo;
           String leitura = String(10);
-          String strHora(3), strMinuto(3);
+          String strHora(3), strMinuto(3), tFuncionamento;
           int hora = 0, minuto = 0;
           // vamos verificar se a valvula deve ser ligada
           if (readString.indexOf("Tempo") >= 0)
           {
-            leitura = readString.substring(10, 12);
+            leitura = readString.substring(11, 13);
             tempo = leitura.toInt();
             tempo = (tempo * 60000);
             digitalWrite(solenoidPin, HIGH);
@@ -123,12 +126,15 @@ void loop() {
           }
           if (readString.indexOf("agen") >= 0)
           {
-            leitura = readString.substring(9, 15);
-            strHora = leitura.substring(1, 3);
+            leitura = readString.substring(10, 18);
+            strHora = leitura.substring(0, 2);
             hora = strHora.toInt();
-            strMinuto = leitura.substring(4, 6);
+            strMinuto = leitura.substring(3, 5);
             minuto = strMinuto.toInt();
-            agenda(hora, minuto);
+            tFuncionamento = leitura.substring(6,7);
+            tempo = tFuncionamento.toInt();
+            tempo = (tempo*60000);
+            agenda(hora, minuto, tempo);
           }
           // Se a string possui o texto Ligar
           if (readString.indexOf("Ligar") >= 0)
@@ -194,18 +200,3 @@ void loop() {
     }
   }
 }
-/*
-  // digital clock display of the time
-  Serial.print(now.hour());
-  printDigits(now.minute());
-  printDigits(now.second());
-  Serial.println(); 
-}
-void printDigits(int digits)
-{
-  Serial.print(":");
-  if(now.minute < 10)
-    Serial.print('0');
-  Serial.print(digits);
-}*/
-
