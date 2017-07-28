@@ -75,7 +75,7 @@ void setup() {
 void loop() {
   // Criar uma conexão de cliente
   //digitalClockDisplay();
-  EthernetClient client = server.available();
+  EthernetClient client = server.available()
   //inicializa o RTC
   now = RTC.now();
  
